@@ -10,23 +10,19 @@ typedef struct data_packet_t {
 } data_packet_t;
 
 uint16_t calculate_crc(const data_packet_t* packet) {
-    uint16_t crc = 0xFFFF; // Initial CRC value
-    
-    // Calculate CRC for id
+    uint16_t crc = 0xFFFF; 
     crc ^= packet->id;
     for (int i = 0; i < 8; ++i) {
         if (crc & 0x0001)
-            crc = (crc >> 1) ^ 0xA001; // Polynomial: x^16 + x^15 + x^2 + 1
+            crc = (crc >> 1) ^ 0xA001; 
         else
             crc = crc >> 1;
     }
-    
-    // Calculate CRC for data_length and data
     for (int i = 0; i < packet->data_length + 1; ++i) {
         crc ^= packet->data[i];
         for (int j = 0; j < 8; ++j) {
             if (crc & 0x0001)
-                crc = (crc >> 1) ^ 0xA001; // Polynomial: x^16 + x^15 + x^2 + 1
+                crc = (crc >> 1) ^ 0xA001; 
             else
                 crc = crc >> 1;
         }
